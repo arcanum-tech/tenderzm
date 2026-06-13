@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const CATEGORIES = ["Construction", "IT", "Goods", "Consulting", "Services"];
 
 export default function SubscribePage() {
+  const router = useRouter();
   const CACHE_KEY = "tenderzm_subscribe";
   const [form, setForm] = useState({ name: "", phone: "", email: "", company_name: "", categories: [] as string[] });
   const [loading, setLoading] = useState(false);
@@ -13,6 +15,14 @@ export default function SubscribePage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // Auth guard
+    const sessionRaw = localStorage.getItem("tenderzm_session");
+    if (!sessionRaw) { router.replace("/login?redirect=/subscribe"); return; }
+    try {
+      const { user } = JSON.parse(sessionRaw);
+      setForm(prev => ({ ...prev, name: prev.name || user.name || "", phone: prev.phone || user.phone || "" }));
+    } catch {}
+    // Restore draft
     try { const s = sessionStorage.getItem(CACHE_KEY); if (s) { const d = JSON.parse(s); if (d) setForm(prev => ({ ...prev, ...d })); } } catch {}
   }, []);
   useEffect(() => {

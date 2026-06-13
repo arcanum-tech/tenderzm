@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import HeaderAuth from "./HeaderAuth";
 
 const CATEGORIES = ["All", "Construction", "IT", "Goods", "Consulting", "Services"];
 
@@ -43,13 +44,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
               <p className="text-xs" style={{ color: "rgba(255,255,255,0.7)" }}>Zambia Tenders & Procurement 🇿🇲</p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <Link href="/subscribe" className="text-xs font-bold px-4 py-2 rounded-full" style={{ background: "rgba(255,255,255,0.2)" }}>
               Get Alerts →
             </Link>
-            <Link href="/admin" className="text-xs font-bold px-4 py-2 rounded-full" style={{ background: "rgba(255,255,255,0.1)" }}>
-              Admin
-            </Link>
+            <HeaderAuth />
           </div>
         </div>
       </header>
@@ -66,10 +65,20 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
           <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.8)" }}>
             All active Zambian tenders in one place. Subscribe PRO to get SMS/email alerts for new tenders in your category.
           </p>
-          <div className="flex flex-wrap justify-center gap-3 text-xs">
+          <div className="flex flex-wrap justify-center gap-3 text-xs mb-6">
             {["Government Tenders", "Private Sector", "SMS Alerts", "All Categories"].map((t) => (
               <span key={t} className="px-3 py-1 rounded-full font-semibold" style={{ background: "rgba(255,255,255,0.2)" }}>{t}</span>
             ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            <a href="#tenders" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-black text-sm text-white"
+              style={{ background: "rgba(255,255,255,0.25)", border: "2px solid rgba(255,255,255,0.4)" }}>
+              Browse Tenders ↓
+            </a>
+            <Link href="/subscribe" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-black text-sm"
+              style={{ background: "#c7d2fe", color: "#3730a3" }}>
+              Get SMS Alerts →
+            </Link>
           </div>
         </div>
       </section>
@@ -89,7 +98,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
       </section>
 
       {/* Tenders */}
-      <section className="max-w-6xl mx-auto px-6 py-8">
+      <section id="tenders" className="max-w-6xl mx-auto px-6 py-8">
         <p className="text-sm text-gray-500 mb-5">{tenders?.length ?? 0} active tenders</p>
         {!tenders?.length ? (
           <div className="text-center py-16 text-gray-400">
